@@ -1,0 +1,1 @@
+{"api_url": "https://sandbox.tradier.com/v1/", "api_url_streaming": "https://stream.tradier.com/v1/", "timestamp": 1487396564, "minimum_contract_cost_threshold": 5.0, "oauth_access_token_secret": "<Does Not Exist Yet>", "environment": "Dev", "config_file_logging": "True", "oauth_access_token": "JmIr55aKnCmigEeEsClRnUvMtPEK"}
