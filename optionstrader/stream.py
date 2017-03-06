@@ -20,10 +20,13 @@ class Stream():
         self.log.debug("***Session id: {0}".format(log_msg))
         return True
 
-
-    def get_stream(self, sessionid):
-        self.session = Tradier(self.access_token, sessionid=sessionid)
+    def get_tradier_stream_no_sessid(self):
+        self.session = Tradier(self.access_token)
         results = self.session.streams.start_stream(['FB'])
+
+    #def get_tradier_stream(self, sessionid=sessionid):
+    #    self.session = Tradier(self.access_token, sessionid=sessionid)
+    #    results = self.session.streams.start_stream(['FB'])
 
     def get_test_stream(self, stream_type='symbols_only', num_chains_limit=5):
         """
