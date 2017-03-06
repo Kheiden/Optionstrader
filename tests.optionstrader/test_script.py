@@ -1,23 +1,27 @@
-import tradier
 import json
 import time
 import datetime
-import ast
 
-from webservice import Webservice
-from database import Database
-from savefile import Savefile
-from scanner import Scanner
-from tools import Tools
+from context import Webservice
+from context import Database
+from context import Savefile
+from context import Scanner
+from context import Tools
 
 import unittest
 
 class TestScript(unittest.TestCase):
+    """
+    DEPRICATED.  Please use 'optionstrader.tools.Tools' for any methods related to this Class.
+
     # Make sure to test all, before a release
 
     # Read the README.md for more information
     # Developer Documentation:
-    # https://developer.tradier.com/documentation
+    # https://developer.tradier.com/documentation    """
+
+
+
 
 
     def setUp(self):
@@ -63,17 +67,6 @@ class TestScript(unittest.TestCase):
 
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~ CURRENTLY TESTING ~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
-
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
     unittest.main()

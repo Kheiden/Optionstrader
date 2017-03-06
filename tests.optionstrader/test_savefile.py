@@ -11,7 +11,7 @@ class TestSavefile(unittest.TestCase):
     def tearDown(self):
         pass
 
-    #@unittest.skip("PASSED.")
+    @unittest.skip("SKIPPING.")
     def test_save_to_file(self):
         obj_dict = {
             'oauth_access_token': 'oauth_access_token123123',
@@ -20,7 +20,7 @@ class TestSavefile(unittest.TestCase):
         test_result = self.savefile.save_to_file(obj_dict)
         self.assertTrue(test_result)
 
-    #@unittest.skip("PASSED.")
+    @unittest.skip("SKIPPING.")
     def test_load_from_file(self):
         obj_dict_2 = {
             'oauth_access_token': 'oauth_access_token123123',

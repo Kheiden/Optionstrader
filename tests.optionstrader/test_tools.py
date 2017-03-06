@@ -1,6 +1,7 @@
 import unittest
-from tools import Tools
-from scanner import Scanner
+
+from context import Tools
+from context import Scanner
 
 class TestTools(unittest.TestCase):
     # Make sure to test all, before a release
@@ -12,7 +13,7 @@ class TestTools(unittest.TestCase):
     def tearDown(self):
         return
 
-    #@unittest.skip("")
+    @unittest.skip("")
     def test_update_database_command(self):
         # TODO Important.
         # This tool will perform the following functions:

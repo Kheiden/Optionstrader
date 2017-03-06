@@ -1,6 +1,6 @@
 import unittest
 
-from config import Config
+from context import Config
 
 class TestSavefile(unittest.TestCase):
     # Make sure to test all, before a release

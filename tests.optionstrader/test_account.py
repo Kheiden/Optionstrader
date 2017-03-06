@@ -13,8 +13,9 @@ class TestAccount(unittest.TestCase):
 
     @unittest.skip("skipping...")
     def test_create_new_account(self):
-        results = self.account.create_new_account
+        results = self.account.create_new_account()
         self.assertTrue(results)
 
+    @unittest.skip("skipping...")
     def test_get_balance(self):
         self.account.get_balance()

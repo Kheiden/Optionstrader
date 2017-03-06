@@ -166,7 +166,9 @@ class Database:
 			query_3 = "option_type LIKE 'call' ORDER BY `timestamp` DESC LIMIT {max_num_option_chains}".format(max_num_option_chains=max_num_option_chains)
 
 			query = (query_1 + query_2 + query_3)
+			self.log.debug(query)
 			result = cursor.execute(query)
+			self.log.debug(cursor.fetchone())
 			self.connection.commit()
 		# If a ticker is specified, retrieve the most recent option_chains
 		else:
@@ -184,7 +186,13 @@ class Database:
 			result = cursor.execute(query)
 			self.connection.commit()
 
+		"""
+		# cursor is a MySQLCursorDict object.
 
+		# cursor is a MySQLCursorDict: SELECT * FROM optionchainsDev WHERE type..
+
+		# retrieve results using cursor.fetchall()
+		"""
 		return cursor
 		# DEPRICATED
 

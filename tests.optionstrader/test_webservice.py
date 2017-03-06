@@ -3,9 +3,9 @@ import unittest
 import time
 import datetime
 
-from config import Config
-from webservice import Webservice
-from customlogging import CustomLog
+from context import Config
+from context import Webservice
+from context import CustomLog
 
 class TestScript(unittest.TestCase):
     # Make sure to test all, before a release

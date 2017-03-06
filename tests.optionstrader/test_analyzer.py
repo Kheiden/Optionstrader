@@ -1,17 +1,17 @@
 import time
 import unittest
 
-from analyzer import Analyzer
-from database import Database
-from customlogging import CustomLog
-from stream import Stream
+from context import analyzer
+from context import database
+from context import customlogging
+from context import stream
 
 class TestAnalyzer(unittest.TestCase):
     # Make sure to test all, before a release
 
     def log_start(method):
         def __init__(*args, **kwargs):
-            log = CustomLog()
+            log = customlogging.CustomLog()
             msg = "STARTING UNITTEST".center(100, "-")
             log.debug(msg)
             return method(*args, **kwargs)
@@ -19,7 +19,7 @@ class TestAnalyzer(unittest.TestCase):
 
     def log_end(method):
         def __init__(*args, **kwargs):
-            log = CustomLog()
+            log = customlogging.CustomLog()
             msg = "UNITTEST COMPLETE".center(100, "-")
             log.debug(msg)
             log.debug("-".center(100, "-"))
@@ -28,27 +28,26 @@ class TestAnalyzer(unittest.TestCase):
 
     @log_start
     def setUp(self):
-        self.analyzer = Analyzer()
-        self.database = Database()
-        self.stream = Stream()
-        self.log = CustomLog()
+        self.analyzer = analyzer.Analyzer()
+        self.database = database.Database()
+        self.stream = stream.Stream()
+        self.log = customlogging.CustomLog()
 
     @log_end
     def tearDown(self):
         pass
 
-
-    def test_analyzer_example_stream(self):
+    @unittest.skip("")
+    def test_analyze_option_chain_from_stream(self):
         # mysqlid CPU utilization is above 90%  Memory is about 588 MB
         # Current median records analyzed is about 21.22 records per seconds
         # Goal is 2122.0 records per second
-
-
-        option_chains_dict = self.stream.get_test_stream(stream_type='option_chains_sorted', num_chains_limit=5)
+        option_chains_msql_buffered_dict = self.stream.get_test_stream(stream_type='option_chains_sorted', num_chains_limit=5)
         # We want to preprocess the datastream, so that we don't waste CPU resourses on database calls
+        option_chain_dict_array = option_chains_msql_buffered_dict.fetchall()
 
-        self.assertEqual(type(option_chains_dict), type({}))
-        self.assertTrue(option_chains_dict)
+        self.assertEqual(option_chain_dict_array[0]['underlying'], 'AAPL')
+        self.assertTrue(option_chain_dict_array)
         #return
 
         #self.log.debug(datastream_generator.next())
@@ -83,7 +82,21 @@ class TestAnalyzer(unittest.TestCase):
             len(results),
             time_after-time_before))
 
-        self.assertTrue(len(results)>0)
+
+
+
+    def test_analyzer_example_stream(self):
+        # mysqlid CPU utilization is above 90%  Memory is about 588 MB
+        # Current median records analyzed is about 21.22 records per seconds
+        # Goal is 2122.0 records per second
+
+        option_chains_msql_buffered_dict = self.stream.get_test_stream(stream_type='option_chains_sorted', num_chains_limit=5)
+        # We want to preprocess the datastream, so that we don't waste CPU resourses on database calls
+        option_chain_dict_array = option_chains_msql_buffered_dict.fetchall()
+
+        self.assertEqual(option_chain_dict_array[0]['underlying'], 'AAPL')
+        self.assertTrue(option_chain_dict_array)
+
 
     @unittest.skip("skipping...")
     def test_analyze_option_chain(self):

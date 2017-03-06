@@ -57,7 +57,7 @@ class Stream():
 
         if stream_type == 'option_chains_sorted':
 
-            option_chains_msql_buffered_dict = self.database.query_option_chains_for_analysis(
+            cursor = self.database.query_option_chains_for_analysis(
         			ticker=None)
 
             #
@@ -66,7 +66,7 @@ class Stream():
             #self.log.debug("***** {0}".format(option_chains_msql_buffered_dict))
             #datastream_generator = (i for i in option_chains_msql_buffered_dict)
             # Returning a dictionary instead of the generator object to save resources
-            return option_chains_msql_buffered_dict
+            return cursor
 
         else:
             self.log.debug("ERROR: stream_type not specified, defaulting to 'symbols_only'")

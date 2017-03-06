@@ -2,7 +2,7 @@ import logging
 
 import unittest
 
-from customlogging import CustomLog
+from context import CustomLog
 
 class Testcustomlogging(unittest.TestCase):
     # Make sure to test all, before a release

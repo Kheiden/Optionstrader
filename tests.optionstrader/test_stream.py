@@ -1,13 +1,13 @@
 import unittest
 
-from context import stream
-from context import customlogging
+from context import Stream
+from context import CustomLog
 
 class TestStream(unittest.TestCase):
 
     def log_start(method):
         def __init__(*args, **kwargs):
-            log = customlogging.CustomLog()
+            log = CustomLog()
             msg = "STARTING UNITTEST".center(100, "-")
             log.debug(msg)
             return method(*args, **kwargs)
@@ -15,7 +15,7 @@ class TestStream(unittest.TestCase):
 
     def log_end(method):
         def __init__(*args, **kwargs):
-            log = customlogging.CustomLog()
+            log = CustomLog()
             msg = "UNITTEST COMPLETE".center(100, "-")
             log.debug(msg)
             return method(*args, **kwargs)
@@ -23,13 +23,14 @@ class TestStream(unittest.TestCase):
 
     @log_start
     def setUp(self):
-        self.stream = stream.Stream()
-        self.log = customlogging.CustomLog()
+        self.stream = Stream()
+        self.log = CustomLog()
 
     @log_end
     def tearDown(self):
         return
 
+    @unittest.skip("NOT YET PASSED")
     def test_get_tradier_stream(self):
         """
         Currently blocked by Tradier.
@@ -47,9 +48,9 @@ class TestStream(unittest.TestCase):
         self.log.debug(results)
         self.assertTrue(results)
 
-    @unittest.skip("PASSED.")
+    @unittest.skip("NOT YET PASSED.")
     def test_get_test_stream(self):
-        datastream_generator = self.stream.get_test_stream(stream_type='option_chains_exp')
+        datastream_generator = self.stream.get_test_stream(stream_type='option_chains')
         # results should be a datastream_generator
 
         first_generator_item = datastream_generator.next()

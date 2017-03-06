@@ -3,8 +3,7 @@ The name is not final.
 This project will one day be used to analyze the stock market in an open source fashion, so it will need to have a name which allows for the analysis of many markets.
 
 Background
-The purpose of this project is to make 1 million dollars.  We will make 1 million dollars distributed into 100 separate accounts each held by different people for the purpose of testing
-a privatized Universal Basic Income. Each person should invest between $100 and $20,000 and they will be provided with a recommended option chain to purchase, if they so choose, at differing intervals
+The purpose of this project is to make 1 million dollars.  We will make 1 million dollars distributed into 100 separate accounts each held by different people for the purpose of testing a privatized Universal Basic Income. Each person should invest between $100 and $20,000 and they will be provided with a recommended option chain to purchase, if they so choose, at differing intervals
 such as: "As fast as possible (~ Continuously)", "Minutely", "Hourly", "Daily", "Weekly", "Monthly". The average amount of money in all of the accounts must be within a 100% margin of the lowest amount
 of money invested on the platform.  The reason for this is because we want to ensure that everyone gets a nice slice of the pie, before anyone goes in for seconds.
 

@@ -1,11 +1,10 @@
 import timeit
 
 import unittest
-from database import Database
-from webservice import Webservice
-from config import Config
-from customlogging import CustomLog
-
+from context import Database
+from context import Webservice
+from context import Config
+from context import CustomLog
 
 class TestAccountDatabase(unittest.TestCase):
     def log_start(method):
@@ -68,12 +67,25 @@ class TestDatabase(unittest.TestCase):
 
 # ---------------------------------------- TESTING ----------------------------------------
 
-    def test_create_new_account(self):
-        results = self.database.
-        self.assertTrue(results)
+    def test_query_option_chains_for_analysis(self):
+        """
+        time_threshold is set to 300k because it's been a while since I've analyzed option_chains
+        """
+        cursor = self.database.query_option_chains_for_analysis(time_threshold=300000)
+
+        # We want to preprocess the datastream, so that we don't waste CPU resourses on database calls
+        option_chain_dict = cursor.fetchall()
+            
+        self.log.debug(option_chain_dict)
+        self.assertTrue(option_chain_dict)
+
 
 
 # ---------------------------------------- SKIPPING ----------------------------------------
+    @unittest.skip("NOT YET PASSED.")
+    def test_create_new_account(self):
+        #results = self.database.
+        self.assertTrue(False)
 
     @unittest.skip("PASSED.")
     def test_get_list_of_tickers(self):
