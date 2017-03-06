@@ -3,48 +3,6 @@ import mysql.connector
 
 from customlogging import CustomLog
 
-class Account:
-	def __init__(self):
-		self.log = CustomLog()
-
-		try:
-			# Using loopback for testing purposes.  Might use socket level later.
-			self.connection = mysql.connector.connect(user='root', password='root',
-														  host='127.0.0.1',
-														  port='8889',
-														  database='algotrader_data')
-		except Exception as e:
-			msg = "Error! Please check the MySQL database connection: {error}".format(error=e)
-			self.log.debug(msg)
-			log_msg = msg
-
-		# CONFIGURATION
-		# Possible Values: "Dev", "Stage", "Production"
-		# Changebelow code when config file exists
-		self.environment = "Dev"
-
-	def get_checking_account_balance(self):
-		cursor = self.connection.cursor()
-		query = ("SELECT balance FROM accounts{env} where account_type='checking'".format(env=self.environment))
-		self.connection.commit()
-		result = cursor.execute(query)
-		for balance in cursor:
-			return balance[0]
-
-
-	def update_checking_account(self, value):
-		# Make the account value whatever the value variable is
-		cursor = self.connection.cursor()
-		query = ("SELECT balance FROM accounts{env} where account_type='checking'".format(env=self.environment))
-		self.connection.commit()
-		result = cursor.execute(query)
-		for balance in cursor:
-			return balance[0]
-		return
-
-
-
-
 class Database:
 
 	def __init__(self):

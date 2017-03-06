@@ -30,5 +30,3 @@ Other things required to complete:
 2) Core engine (Eve Module? / REST API module)
 3) Webservice (Flask/Django API)
 4) Web server (HTML/JS/CSS- Use an automated tool)
-
-Encrypted45
