@@ -82,9 +82,7 @@ class TestAnalyzer(unittest.TestCase):
             len(results),
             time_after-time_before))
 
-
-
-
+    @unittest.skip("")
     def test_analyzer_example_stream(self):
         # mysqlid CPU utilization is above 90%  Memory is about 588 MB
         # Current median records analyzed is about 21.22 records per seconds
@@ -100,8 +98,6 @@ class TestAnalyzer(unittest.TestCase):
 
     @unittest.skip("skipping...")
     def test_analyze_option_chain(self):
-
-
         # This module take the stock's most recent price into account when
         # performing the analysis.
         # This function will eventually be run on a scheduled basis
@@ -134,52 +130,6 @@ class TestAnalyzer(unittest.TestCase):
         # Make sure that at least one of the tickers in the ticker_array comes back
         # successful
         self.assertGreater(max(completion_list), -1)
-
-    @unittest.skip("skipping...")
-    def test_analyze_all_option_chains(self):
-        '''
-        # First Run:
-        # Completed in 504.353s
-        #
-        # Second Run:
-        # Completed in 422.943s 75-93% CPU utilization on Mac mini
-        #
-        # Third Run:
-        # Completed in 413.556s x% CPU utilization on Mac mini
-        #
-        # Fourth Run
-        #  - option_chain_timestamp_threshold = 300000
-        #  - maximum_number_of_option_chains = 10
-        # Completed in 164.522s x% CPU utilization on Mac mini
-        #
-        # Fifth Run
-        #  - option_chain_timestamp_threshold = 300000
-        #  - maximum_number_of_option_chains = 10
-        # Completed in 149.962s x% CPU utilization on Mac mini
-        #
-        # Sixth Run
-        #  - option_chain_timestamp_threshold = 300000
-        #  - maximum_number_of_option_chains = 10
-        #  - max_number_threads = 8
-        # Completed in 24.169s ~69% CPU utilization on Mac mini
-        #
-        # Seventh Run
-        #  - option_chain_timestamp_threshold = 300000
-        #  - maximum_number_of_option_chains = 10
-        #  - max_number_threads = 10
-        # Completed in 22.770s ~72% CPU utilization on Mac mini
-        #
-        # Eighth Run
-        #  - option_chain_timestamp_threshold = 300000
-        #  - maximum_number_of_option_chains = 10
-        #  - max_number_threads = 16
-        # Completed in 22.770s ~72% CPU utilization on Mac mini
-        '''
-
-        # TODO
-        # Confirm that the option expiration date has been added to the database appropiately
-        results = self.analyzer.analyze_all_option_chains()
-        self.assertTrue(results)
 
     @unittest.skip("PASSED")
     def test_get_recommended_option_purchase(self):

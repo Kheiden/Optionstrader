@@ -6,6 +6,23 @@ from customlogging import CustomLog
 class Database:
 
 	def __init__(self):
+		"""
+		There's some confusion with database vs table.
+
+		We will have separate environments for Dev/Stage and Prd,
+		so we will want to ensure that the databases are seperate.
+
+		TODO: Ensure that the Dev/Stage and Prod environments are fully seggregared
+		with their own databases.  This will allows us to migrate the databases when
+		the time comes.
+
+		environment = 'dev' ('dev', 'stage', 'production')
+		database = "algotrader_".format(environment)
+
+		table = ('accounts', 'optionchainanalysis', 'optionchains', 'stocks')
+
+		"""
+
 		# initiate the connection when the database object is created
 		# Standard procedure will be to open the connection,
 		# perform the action, then close the connection

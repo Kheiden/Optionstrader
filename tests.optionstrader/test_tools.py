@@ -2,6 +2,8 @@ import unittest
 
 from context import Tools
 from context import Scanner
+from context import Analyzer
+
 
 class TestTools(unittest.TestCase):
     # Make sure to test all, before a release
@@ -9,6 +11,7 @@ class TestTools(unittest.TestCase):
     def setUp(self):
         self.tools = Tools()
         self.scanner = Scanner()
+        self.analyzer = Analyzer
 
     def tearDown(self):
         return
@@ -35,7 +38,7 @@ class TestTools(unittest.TestCase):
         # - Estimated REST API calls: ~3000
         # - Adds option chains to db
         # --- 3 ---
-        # self.analyzer.analyze_all_option_chains()
+        self.analyzer.analyze_all_option_chains()
         # - Estimated REST API calls: 0
         # - Analyzes the option chains, then updates the db
         # - Can be run in parallel with Steps 1 and 2
@@ -111,3 +114,51 @@ class TestTools(unittest.TestCase):
         # in order to provide data to the website and to other APIs
         # TODO: Handle oauth authentication
         self.assertTrue(False)
+
+    @unittest.skip("NOT YET PASSED.")
+    def test_analyze_all_option_chains(self):
+        '''
+        Moved from test_analyzer.TestAnalyzer.test_analyze_all_option_chains()
+
+        # First Run:
+        # Completed in 504.353s
+        #
+        # Second Run:
+        # Completed in 422.943s 75-93% CPU utilization on Mac mini
+        #
+        # Third Run:
+        # Completed in 413.556s x% CPU utilization on Mac mini
+        #
+        # Fourth Run
+        #  - option_chain_timestamp_threshold = 300000
+        #  - maximum_number_of_option_chains = 10
+        # Completed in 164.522s x% CPU utilization on Mac mini
+        #
+        # Fifth Run
+        #  - option_chain_timestamp_threshold = 300000
+        #  - maximum_number_of_option_chains = 10
+        # Completed in 149.962s x% CPU utilization on Mac mini
+        #
+        # Sixth Run
+        #  - option_chain_timestamp_threshold = 300000
+        #  - maximum_number_of_option_chains = 10
+        #  - max_number_threads = 8
+        # Completed in 24.169s ~69% CPU utilization on Mac mini
+        #
+        # Seventh Run
+        #  - option_chain_timestamp_threshold = 300000
+        #  - maximum_number_of_option_chains = 10
+        #  - max_number_threads = 10
+        # Completed in 22.770s ~72% CPU utilization on Mac mini
+        #
+        # Eighth Run
+        #  - option_chain_timestamp_threshold = 300000
+        #  - maximum_number_of_option_chains = 10
+        #  - max_number_threads = 16
+        # Completed in 22.770s ~72% CPU utilization on Mac mini
+        '''
+
+        # TODO
+        # Confirm that the option expiration date has been added to the database appropiately
+        results = self.analyzer.analyze_all_option_chains()
+        self.assertTrue(results)

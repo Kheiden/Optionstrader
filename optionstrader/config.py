@@ -95,6 +95,10 @@ class Config:
         config_item = self.get_config_item('minimum_contract_cost_threshold')
         return config_item
 
+    def get_environment(self):
+        config_item = self.get_config_item('environment')
+        return config_item
+
     def get_environment_url(self):
         config_item = self.get_config_item('api_url')
         return config_item
