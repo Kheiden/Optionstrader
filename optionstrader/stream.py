@@ -1,8 +1,8 @@
-from tradier import Tradier
+from .tradier import Tradier
 
-from config import Config
-from customlogging import CustomLog
-from database import Database
+from .config import Config
+from .customlogging import CustomLog
+from .database import Database
 
 class Stream():
 
@@ -58,7 +58,7 @@ class Stream():
         if stream_type == 'option_chains_sorted':
 
             cursor = self.database.query_option_chains_for_analysis(
-        			ticker=None)
+                    ticker=None)
 
             #
 

@@ -1,7 +1,8 @@
 #from tradier import core
-import core
-#from tradier import http
-import http
+from ..tradier import core
+
+from ..tradier import http
+#import http
 
 from ..config import Config
 

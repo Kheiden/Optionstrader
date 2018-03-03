@@ -2,7 +2,7 @@ import os
 import json
 import time
 
-from customlogging import CustomLog
+from optionstrader.customlogging import CustomLog
 
 class Config:
 
@@ -64,7 +64,7 @@ class Config:
     def add_new_config_pair_to_file(self, config_pair):
         # Only 1 config value at a time
         file_dict = self.load_from_file()
-        file_dict[config_pair.keys()[0]] = config_pair.values()[0]
+        file_dict[list(config_pair.keys())[0]] = list(config_pair.values())[0]
         self.save_to_file(file_dict)
         # returns file_dict if successful
         return file_dict
@@ -73,15 +73,15 @@ class Config:
         # Only 1 config value at a time
         file_dict = self.load_from_file()
         try:
-            del file_dict[config_pair.keys()[0]]
+            del file_dict[list(config_pair.keys())[0]]
             if file_dict['config_file_logging'] == 'True':
-                msg = "{0} removed from file_dict Loaded from {1}".format(config_pair.keys()[0], self.file_location)
+                msg = "{0} removed from file_dict Loaded from {1}".format(list(config_pair.keys())[0], self.file_location)
                 log_msg = msg
                 self.log.debug(msg)
         except:
             if file_dict['config_file_logging'] == 'True':
                 log_msg = ""
-                log_msg = "ERROR: {0} unable to be removed from file_dict Loaded from {1}".format(config_pair.keys()[0], self.file_location)
+                log_msg = "ERROR: {0} unable to be removed from file_dict Loaded from {1}".format(list(config_pair.keys())[0], self.file_location)
         self.save_to_file(file_dict)
         # returns file_dict if successful
         return file_dict

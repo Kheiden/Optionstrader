@@ -1,9 +1,6 @@
 import os
-
 import pytest
-
 import tradier
-
 
 @pytest.fixture
 def token():

@@ -1,3 +1,11 @@
-###### Requirements without Version Specifiers ######
+######### Requirements ########
+# Developed with Python 3.6.1 #
+
 requests
-tradier
+tradier (https://github.com/cablehead/python-tradier)
+- tornado
+mysql-connector==2.1.6
+
+
+## Optional##
+MAMP Stack

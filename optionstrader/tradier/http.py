@@ -1,5 +1,5 @@
 import collections
-import urlparse
+#import urlparse
 import urllib
 
 import tornado
@@ -110,7 +110,8 @@ class vanilla(object):
     class Client(Base):
         def __init__(self, h, uri):
             self.h = h
-            parsed = urlparse.urlsplit(uri)
+            #parsed = urlparse.urlsplit(uri)
+            parsed = urllib.parse.urlparse(uri)
             self.host = '%s://%s' % (parsed.scheme, parsed.netloc)
             self.conn = self.h.http.connect(self.host)
             self.base_path = parsed.path

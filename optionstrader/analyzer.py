@@ -1,18 +1,18 @@
 # -*- coding: UTF-8 -*-
 import math
 import time
-import Queue
+import queue
 
 import threading
 
 from multiprocessing import Pool, TimeoutError
 
-from database import Database
-from config import Config
-from customlogging import CustomLog
-from customlogging import Analyzed_Ticker_Stream
+from optionstrader.database import Database
+from optionstrader.config import Config
+from optionstrader.customlogging import CustomLog
+from optionstrader.customlogging import Analyzed_Ticker_Stream
 
-class Analyzer():
+class Analyzer:
 
     def __init__(self):
         self.database = Database()
@@ -26,7 +26,7 @@ class Analyzer():
         self.max_num_option_chains = 500
         # About 3.5 days in seconds = 302400
         self.option_chain_timestamp_threshold = 300000
-        self.db_update_queue = Queue.Queue()
+        self.db_update_queue = queue.Queue()
 
     # Decorator to time each method
     # Will be used for future optimization
@@ -160,7 +160,7 @@ class Analyzer():
         #while option_chains
         #for option_chain in option_chains:
             #pass
-        option_chain_queue = Queue.Queue()
+        option_chain_queue = queue.Queue()
 
         for option_chain in option_chains:
             option_chain_queue.put(option_chain)

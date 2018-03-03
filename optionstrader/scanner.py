@@ -1,10 +1,10 @@
 import time
 
-from database import Database
-from webservice import Webservice
-from config import Config
-from customlogging import CustomLog
-from analyzer import Analyzer
+from .database import Database
+from .webservice import Webservice
+from .config import Config
+from .customlogging import CustomLog
+from .analyzer import Analyzer
 
 class Scanner:
 

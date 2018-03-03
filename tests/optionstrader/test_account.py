@@ -1,19 +1,17 @@
 import unittest
-from context import Account
-from context import CustomLog
-
+from context import optionstrader
 
 class TestAccount(unittest.TestCase):
     # Make sure to test all, before a release
 
     def setUp(self):
-        self.account = Account()
-        self.log = CustomLog()
+        self.account = optionstrader.Account()
+        self.log = optionstrader.CustomLog()
 
     def tearDown(self):
         return
 
-    #@unittest.skip("PASSED.")
+    @unittest.skip("Passed.")
     def test_create_new_account(self):
         account_type = 'checking'
         initial_deposit = 10000.50
@@ -25,9 +23,9 @@ class TestAccount(unittest.TestCase):
 
         self.assertTrue(results)
 
-    #@unittest.skip("PASSED.")
+    @unittest.skip("Passed.")
     def test_get_balance(self):
-        account_number = '9223372036854775808'
+        account_number = '537166657303428193258'
         account_type = 'checking'
         balance = self.account.get_balance(
             account_number=account_number,
@@ -40,4 +38,6 @@ class TestAccount(unittest.TestCase):
     def test_create_new_account_no_collisions(self):
         # TODO Implement later
         # make sure that account_number collisions are impossible
+        # This logic should probably be implemented inside the account.create_new_account
+        # method.
         self.assertTrue(False)

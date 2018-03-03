@@ -1,53 +1,68 @@
-import json, re
+import os
+import re
+import json
 
-from database import Database
-from webservice import Webservice
+
+#from optionstrader.database import Database
+from optionstrader.webservice import Webservice
 
 class Parser:
 
-	def __init__(self):
-		'''
-		This class is only used for when text needs parsing
-		'''
-		return
+    def __init__(self):
+        '''
+        This class is only used for when text needs parsing
+        '''
+        return
 
-	def add_stock_to_database(self, symbol):
-		# DEPRECATED FUNCTION
-		webservice = Webservice()
-		parsed_json = json.loads(webservice.get_from_yahoo(symbol))
-		dictionary = parsed_json['query']['results']['quote']
+    def add_stock_to_database(self, symbol):
+        # DEPRECATED FUNCTION
+        # This was used to download a list of ticker symbols and current prices.
+        # Depricated since we are moving foward with tradier, not yahoo as the
+        # source for the data.
 
-		database = Database()
+        webservice = Webservice()
+        parsed_json = json.loads(webservice.get_from_yahoo(symbol))
+        dictionary = parsed_json['query']['results']['quote']
 
-		column_string = ""
-		for i in dictionary.items():
-			column_string = column_string + ", " + i[0]
+        database = Database()
 
-		column_string = "(" + column_string[2:] + ")"
+        column_string = ""
+        for i in dictionary.items():
+            column_string = column_string + ", " + i[0]
 
-		value_string = ""
-		for i in dictionary.items():
-			value_string = value_string + "\", \"" + str(i[1])
-		value_string = "(\"" + value_string[4:] + "\")"
+        column_string = "(" + column_string[2:] + ")"
 
-		# Because for some reason there are two "Symbol" fields
-		column_string = column_string.replace("Symbol", "Symbol_2")
-		column_string = column_string.replace(", Change, ", ", Change_percent, ")
-		column_string = column_string.replace(", Name, ", ", Name_of_company, ")
-		column_string = column_string.replace(", Open, ", ", Open_price, ")
+        value_string = ""
+        for i in dictionary.items():
+            value_string = value_string + "\", \"" + str(i[1])
+        value_string = "(\"" + value_string[4:] + "\")"
 
-		database.insert_values_into_table(column_string, value_string)
-		#print(column_string)
-		#print(value_string)
+        # Because for some reason there are two "Symbol" fields
+        column_string = column_string.replace("Symbol", "Symbol_2")
+        column_string = column_string.replace(", Change, ", ", Change_percent, ")
+        column_string = column_string.replace(", Name, ", ", Name_of_company, ")
+        column_string = column_string.replace(", Open, ", ", Open_price, ")
 
-		database.close_connection()
-		#print(noob)
-		print("%s Added to database.") % (symbol)
+        database.insert_values_into_table(column_string, value_string)
+        #print(column_string)
+        #print(value_string)
 
-	def extract_symbols(self):
-		file_data = open("/Users/kheiden/Desktop/algotrader/nasdaq_symbols.txt", 'r')
-		file_string = file_data.read()
-		regex = re.compile("^[A-Z]{1,}\|", re.MULTILINE)
-		output = re.findall(regex, file_string)
-		for i in output:
-			self.add_stock_to_database(i[:-1])
+        database.close_connection()
+        #print(noob)
+        print("%s Added to database.") % (symbol)
+
+    def extract_symbols(self):
+        file_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')), 'nasdaq_symbols.txt')
+        #file_data = open(file_path, 'r')
+        with open(file_path, 'r') as file_data:
+            file_string = file_data.read()
+        regex = re.compile("^[A-z]{1,}\|.+?\|", re.MULTILINE)
+        symbols_and_names = re.findall(regex, file_string)
+
+        cleaned_symbols_and_names = []
+        for i in symbols_and_names:
+            cleaned_symbols_and_names.append(i.split("|")[:-1])
+
+        return cleaned_symbols_and_names
+        #for i in output:
+        #    self.add_stock_to_database(i[:-1])

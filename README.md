@@ -29,3 +29,16 @@ Other things required to complete:
 2) Core engine (Eve Module? / REST API module)
 3) Webservice (Flask/Django API)
 4) Web server (HTML/JS/CSS- Use an automated tool)
+
+Installation
+1) run `pip install requirements.txt`
+2) configure `config_data_Dev.json` with MySQL database connection Information and Tradier OAuth credentials
+3) run the following to set up the database:
+```import optionstrader
+db = optionstrader.Database()
+db.configure_database()```
+
+
+TESTING
+To run the unittests, `cd` into the /tests/optionstrader folder and run the following command:
+`python unittest -m discover`
