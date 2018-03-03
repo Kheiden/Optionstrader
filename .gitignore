@@ -6,3 +6,5 @@
 *.log
 
 *.shh
+
+optionstrader/config_data/config_data_Dev.json

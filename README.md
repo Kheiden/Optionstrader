@@ -1,4 +1,4 @@
-Project working name: Optionstrader
+#Optionstrader
 The name is not final.
 This project will one day be used to analyze the stock market in an open source fashion, so it will need to have a name which allows for the analysis of many markets.
 
@@ -34,22 +34,26 @@ Installation
 1) run `pip install requirements.txt`
 2) configure `config_data_Dev.json` with MySQL database connection Information and Tradier OAuth credentials
 3) run the following to set up the database:
-```import optionstrader
+```
+import optionstrader
 db = optionstrader.Database()
 db.configure_database()
 ```
-4) add the `oauth_access_token` to `config_data_Dev.json`
+4) Obtain an Oauth access token from the Traider Developer web portal and add the `oauth_access_token` to `config_data_Dev.json`
 5) Start the stock scan with the following code:
-```scanner = optionstracer.Scanner()
+```
+scanner = optionstracer.Scanner()
 scanner.start_stock_scan()
 ```
 6) After the stock data is finished, you can start the option chain scan with the following:
 
-```scanner.start_option_chain_scan(number_of_weeks=4, scan_type='inside_out',
+```
+scanner.start_option_chain_scan(number_of_weeks=4, scan_type='inside_out',
         query_type='default', ticker_array=None)
 ```
 
 
 TESTING
 To run the unittests, `cd` into the /tests/optionstrader folder and run the following command:
+
 `python unittest -m discover`

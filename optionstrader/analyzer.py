@@ -314,7 +314,8 @@ class Analyzer:
             #self.log.debug("percentage_increase_analysis:")
             #self.log.debug(percentage_increase_analysis)
             # Uncommenting until further testing has been done.  TODO finish this part.
-            self.get_recommended_option_purchase(percentage_increase_analysis)
+            # TODO finish the analysis part
+            #self.get_recommended_option_purchase(percentage_increase_analysis)
         return True
 
     def get_recommended_option_purchase(self, percentage_increase_analysis):
