@@ -36,7 +36,18 @@ Installation
 3) run the following to set up the database:
 ```import optionstrader
 db = optionstrader.Database()
-db.configure_database()```
+db.configure_database()
+```
+4) add the `oauth_access_token` to `config_data_Dev.json`
+5) Start the stock scan with the following code:
+```scanner = optionstracer.Scanner()
+scanner.start_stock_scan()
+```
+6) After the stock data is finished, you can start the option chain scan with the following:
+
+```scanner.start_option_chain_scan(number_of_weeks=4, scan_type='inside_out',
+        query_type='default', ticker_array=None)
+```
 
 
 TESTING

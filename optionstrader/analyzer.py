@@ -206,8 +206,9 @@ class Analyzer:
         # pay 100x the average price of the item.
         symbol = option_chain['underlying']
 
+        #self.log.debug("SYMBOL: {}".format(symbol))
         current_stock_price = self.sanitize_stock_price(symbol)
-        #log_msg = "current_stock_price: {}".format(current_stock_price)
+        #self.log.debug("current_stock_price: {}".format(current_stock_price))
         # strike_price = float(option_chain['strikePrice'])
         strike_price = option_chain['strike']
 

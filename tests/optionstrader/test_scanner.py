@@ -1,15 +1,13 @@
 import time
 import unittest
 
-from context import Scanner
-from context import Webservice
-from context import CustomLog
+from context import optionstrader
 
 class TestScanner(unittest.TestCase):
     # Make sure to test all, before a release
     def log_start(method):
         def __init__(*args, **kwargs):
-            log = CustomLog()
+            log = optionstrader.CustomLog()
             msg = "STARTING UNITTEST".center(100, "-")
             log.debug(msg)
             return method(*args, **kwargs)
@@ -17,7 +15,7 @@ class TestScanner(unittest.TestCase):
 
     def log_end(method):
         def __init__(*args, **kwargs):
-            log = CustomLog()
+            log = optionstrader.CustomLog()
             msg = "UNITTEST COMPLETE".center(100, "-")
             log.debug(msg)
             return method(*args, **kwargs)
@@ -25,9 +23,9 @@ class TestScanner(unittest.TestCase):
 
     @log_start
     def setUp(self):
-        self.scanner = Scanner()
-        self.webservice = Webservice()
-        self.log = CustomLog()
+        self.scanner = optionstrader.Scanner()
+        self.webservice = optionstrader.Webservice()
+        self.log = optionstrader.CustomLog()
 
     @log_end
     def tearDown(self):
@@ -69,6 +67,13 @@ class TestScanner(unittest.TestCase):
         #self.assertTrue(results)
 
 
+    def test_process_option_chain(self):
+        result = self.scanner.start_option_chain_scan(number_of_weeks=4, scan_type='next_week_only',
+                query_type='one_option_only', ticker_array=None)
+
+        self.assertTrue(result)
+
+
     @unittest.skip("NOT YET PASSED.")
     def test_start_option_chain_scan(self):
         # This is a perpetual scan.  It will never pass because it will never complete
@@ -87,7 +92,8 @@ class TestScanner(unittest.TestCase):
         -
         '''
 
-        query_type = 'options_only'
+        query_type = 'default'
+        #query_type = 'options_only'
         number_of_weeks = 4
         scan_type = 'inside_out'
         time_before = time.time()

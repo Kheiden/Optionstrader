@@ -67,6 +67,14 @@ class Database:
         table_name = "stocks"
         self.create_table(database_name, table_name, table_columns)
 
+        table_columns = "(symbol TEXT)"
+        table_name = "optionchains"
+        self.create_table(database_name, table_name, table_columns)
+
+        table_columns = "(symbol TEXT)"
+        table_name = "optionchainanalysis"
+        self.create_table(database_name, table_name, table_columns)
+
         self.parse_symbols_and_add_to_db()
         print("Database has been configured")
         return True
@@ -85,7 +93,7 @@ class Database:
 
     def create_table(self, database_name, table_name, table_columns):
         cursor = self.connection.cursor()
-        query = ("CREATE TABLE {database_name}.{table_name} {table_columns}").format(
+        query = "CREATE TABLE {database_name}.{table_name} {table_columns}".format(
             database_name=database_name,
             table_name=table_name,
             table_columns=table_columns)
@@ -146,13 +154,13 @@ class Database:
         #for record in results_table:
         #    return record
 
-    def get_list_of_tickers(self, query_type='Default'):
+    def get_list_of_tickers(self, query_type='default'):
         # TODO Implement the following:
         # We will want to stream data from external to the database then stream the symbols from the database
         # as they're made available.
 
         table = 'optionchains'
-        if query_type == 'Default':
+        if query_type == 'default':
             # Run the normal code here
             query = "SELECT DISTINCT symbol FROM {db}.stocks WHERE symbol is not Null".format(
                 db=self.database_name)
@@ -188,7 +196,9 @@ class Database:
         # We want to make sure that the 'last_' price is within reason.  We don't want to
         # pay 100x the average price of the item.
         cursor = self.connection.cursor(dictionary=True)
-        query = "SELECT * FROM optionchainsDev WHERE symbol LIKE \'{symbol}\' ORDER BY `timestamp` DESC LIMIT 1".format(symbol=symbol)
+        query = "SELECT * FROM {db}.stocks WHERE symbol LIKE \'{symbol}\' ORDER BY `timestamp` DESC LIMIT 1".format(
+            db=self.database_name,
+            symbol=symbol)
         self.connection.commit()
         result = cursor.execute(query)
         for stock_data in cursor:
@@ -199,8 +209,8 @@ class Database:
         # This function is typically used for testing purposes
 
         cursor = self.connection.cursor(dictionary=True, buffered=True)
-        query = ("SELECT * from optionchains{env} LIMIT {num_chains_limit}".format(
-            env=self.environment,
+        query = ("SELECT * from {db}.optionchains LIMIT {num_chains_limit}".format(
+            db=self.database_name,
             num_chains_limit=num_chains_limit))
         self.connection.commit()
         cursor.execute(query)
@@ -218,7 +228,8 @@ class Database:
 
         cursor = self.connection.cursor()
         # As of 2/11/17, there are 3078 total results from this query
-        query = ("SELECT * from optionchains{env} LIMIT 1".format(env=self.environment))
+        query = "SELECT * from {db}.optionchains LIMIT 1".format(
+            db=self.database_name)
         self.connection.commit()
         option_chain = cursor.execute(query)
         return option_chain
@@ -231,7 +242,8 @@ class Database:
         # If no tickers are specified, retrieve the most recent option_chains
         if ticker == None:
             cursor = self.connection.cursor(dictionary=True, buffered=True)
-            query_1 = "SELECT * FROM optionchains{env} WHERE type LIKE 'option' and ".format(env=self.environment)
+            query_1 = "SELECT * FROM {db}.optionchains WHERE type LIKE 'option' and ".format(
+                db=self.database_name)
 
             query_2 = "timestamp > ({current_timestamp}-{time_threshold}) and ".format(
                 time_threshold=time_threshold,
@@ -248,7 +260,8 @@ class Database:
             # We want to return the dictionary type
             # we need a MySQL buffered response
             cursor = self.connection.cursor(dictionary=True, buffered=True)
-            query_1 = "SELECT * FROM optionchains{env} WHERE type LIKE 'option' and ".format(env=self.environment)
+            query_1 = "SELECT * FROM {db}.optionchains WHERE type LIKE 'option' and ".format(
+                db=self.database_name)
 
             query_2 = "timestamp > ({current_timestamp}-{time_threshold}) and underlying LIKE '{ticker}' and ".format(ticker=ticker,
                 time_threshold=time_threshold,
@@ -293,7 +306,7 @@ class Database:
                 return sanitized_field_name
         return field_name
 
-    def save_option_chain_to_database(self, option_chain, database='optionchains'):
+    def save_option_chain_to_table(self, option_chain, table='optionchains'):
         # PLEASE NOTE:
         # If a new keyword (column) is detected, then the INSERT INTO command will fail
         # The next time that the option chain is attempted to be saved, the record
@@ -321,10 +334,11 @@ class Database:
 
                 keys_formatted = str("(" + str(KEYS)[1:-1] + ")").replace("'", "")
                 values_formatted = str("(" + str(VALUES)[1:-1] + ")")
-                query = ("INSERT INTO {database}{env} {keys} VALUES {values}").format(env=self.environment,
+                query = ("INSERT INTO {db}.{table} {keys} VALUES {values}").format(
+                            db=self.database_name,
+                            table=table,
                             keys=keys_formatted,
-                            values=values_formatted,
-                            database=database)
+                            values=values_formatted)
                 #log_msg = "~~~~-----------------~~~"
                 #print(query)
                 cursor.execute(query)
@@ -346,15 +360,15 @@ class Database:
                     except:
                         field_type = self.type_conversion(option_chain[field_name[:-1]])
                     try:
-                        self.add_new_column_to_database_table(field_name, field_type, database=database)
+                        self.add_new_column_to_table(field_name, field_type, table=table)
                     except mysql.connector.ProgrammingError:
                         pass
-                log_msg = "Information. The fields were updated in table '{0}'.".format(database)
+                log_msg = "Information. The fields were updated in table '{0}'.".format(table)
                 if attempt_number == 1:
-                    log_msg = "Error: Unable to update SQL Database"
+                    log_msg = "Error: Unable to update SQL table"
                     break
                 else:
-                    log_msg = "Retrying the update to the database"
+                    log_msg = "Retrying the update to the table"
                     attempt_number += 1
         return True
 
@@ -362,16 +376,17 @@ class Database:
     def update_option_chain_with_analysis(self, percentage_increase_analysis):
         # This is the analysis done for the percentage increase (1,2,5 percent)
         # of an underlyer
-        result = self.save_option_chain_to_database(percentage_increase_analysis, database='optionchainanalysis')
+        result = self.save_option_chain_to_table(percentage_increase_analysis, table='optionchainanalysis')
         return True
 
-    def add_new_column_to_database_table(self, column_name, data_type, database):
+    def add_new_column_to_table(self, column_name, data_type, table):
         cursor = self.connection.cursor()
         env = self.environment
-        query = ("ALTER TABLE {database}{env} ADD {column_name} {data_type}".format(env=env,
+        query = "ALTER TABLE {db}.{table} ADD {column_name} {data_type}".format(
+            db=self.database_name,
+            table=table,
             column_name=column_name,
-            data_type=data_type,
-            database=database))
+            data_type=data_type)
         cursor.execute(query)
         self.connection.commit()
         return True

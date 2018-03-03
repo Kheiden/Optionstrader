@@ -22,11 +22,11 @@ class Scanner:
 
 
     def process_option_chain(self, option_chain):
-        #log_msg = "Starting self.database.save_option_chain_to_database..."
+        #log_msg = "Starting self.database.save_option_chain_to_table..."
         #self.log.debug(log_msg)
         #time.time()
         # Uncomment below
-        results_save = self.database.save_option_chain_to_database(option_chain)
+        results_save = self.database.save_option_chain_to_table(option_chain)
         #time.time()
         #log_msg = "Starting self.analyzer.analyze_single_option_chain..."
         #self.log.debug(log_msg)
@@ -38,6 +38,9 @@ class Scanner:
 
         self.log.debug("Getting all all_option_chains for ticker '{}'".format(ticker))
         all_option_chains = self.webservice.get_option_chain_for_ticker(environment_url, ticker, expiration_date)
+
+        results_save = False
+        results_analyze = False
 
         # TODO Time this to make sure that it's optimal.  Set optimization goal.
         # Implement later: Send this to a separate thread for processing
@@ -140,14 +143,14 @@ class Scanner:
 
     def chunks(self, l, n):
         n = max(1, n)
-        return (l[i:i+n] for i in xrange(0, len(l), n))
+        return (l[i:i+n] for i in range(0, len(l), n))
 
     def start_stock_scan(self):
         list_of_tickers = self.database.get_list_of_tickers()
         for ticker_chunk in self.chunks(list_of_tickers, 1000):
             chunk_stock_data = self.webservice.get_market_quote_for_ticker(self.config.get_environment_url, ticker_chunk)
             for single_stock_data in chunk_stock_data:
-                self.database.save_option_chain_to_database(single_stock_data)
+                self.database.save_option_chain_to_table(single_stock_data, table='stocks')
                 log_msg = "Ticker has been added to database: {}".format(single_stock_data['symbol'])
                 self.log.debug(log_msg)
             log_msg = len(chunk_stock_data)
@@ -158,7 +161,7 @@ class Scanner:
         for ticker_chunk in self.chunks(list_of_tickers, 1000):
             chunk_stock_data = self.webservice.get_company_information_for_ticker(self.config.get_environment_url, ticker_chunk)
             for single_stock_data in chunk_stock_data:
-                self.database.save_option_chain_to_database(single_stock_data)
+                self.database.save_option_chain_to_table(single_stock_data, table='stocks')
                 #log_msg = "Ticker has been added to database: {}".format(single_stock_data['symbol'])
             msg = "first {0} symbols complete".format(len(chunk_stock_data))
             self.log.debug(msg)

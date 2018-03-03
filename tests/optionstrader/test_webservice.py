@@ -3,15 +3,13 @@ import unittest
 import time
 import datetime
 
-from context import Config
-from context import Webservice
-from context import CustomLog
+from context import optionstrader
 
 class TestScript(unittest.TestCase):
     # Make sure to test all, before a release
     def log_start(method):
         def __init__(*args, **kwargs):
-            log = CustomLog()
+            log = optionstrader.CustomLog()
             msg = "STARTING UNITTEST".center(100, "-")
             log.debug(msg)
             return method(*args, **kwargs)
@@ -19,7 +17,7 @@ class TestScript(unittest.TestCase):
 
     def log_end(method):
         def __init__(*args, **kwargs):
-            log = CustomLog()
+            log = optionstrader.CustomLog()
             msg = "UNITTEST COMPLETE".center(100, "-")
             log.debug(msg)
             return method(*args, **kwargs)
@@ -27,18 +25,20 @@ class TestScript(unittest.TestCase):
 
     @log_start
     def setUp(self):
-        self.config = Config()
-        self.webservice = Webservice()
+        self.config = optionstrader.Config()
+        self.log = optionstrader.CustomLog()
+        self.webservice = optionstrader.Webservice()
         self.next_expiration_date = self.webservice.get_option_chain_next_expiration_date()
 
     @log_end
     def tearDown(self):
         pass
 
-    @unittest.skip("PASSED.")
-    def test_import_module(self):
-        #import requests
-        self.assertTrue(True)
+# ---------------------------------------- TESTING ----------------------------------------
+
+
+
+# ---------------------------------------- SKIPPING ----------------------------------------
 
     @unittest.skip("PASSED.")
     def test_get_quote(self):
@@ -47,11 +47,13 @@ class TestScript(unittest.TestCase):
         final_results = results[0]['symbol']
         self.assertTrue(final_results)
 
-    #@unittest.skip("PASSED.")
+
+    @unittest.skip("PASSED.")
     def test_get_option_chain_for_ticker(self):
         stock_ticker = "FB"
         option_chain = self.webservice.get_option_chain_for_ticker(environment_url=self.config.get_environment_url, stock_ticker=stock_ticker, exp_date=self.next_expiration_date)
-        #log_msg = "option_chain {}".format(option_chain)
+        log_msg = "option_chain {}".format(option_chain)
+        self.log.debug(log_msg)
         self.assertTrue(option_chain)
 
     @unittest.skip("PASSED.")
