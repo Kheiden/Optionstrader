@@ -1,4 +1,5 @@
 from optionstrader.account import Account
+from optionstrader.analyzer import Analyzer
 from optionstrader.database import Database
 from optionstrader.customlogging import CustomLog
 from optionstrader.config import Config

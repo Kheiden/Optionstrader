@@ -1,17 +1,14 @@
 import time
 import unittest
 
-from context import analyzer
-from context import database
-from context import customlogging
-from context import stream
+from context import optionstrader
 
 class TestAnalyzer(unittest.TestCase):
     # Make sure to test all, before a release
 
     def log_start(method):
         def __init__(*args, **kwargs):
-            log = customlogging.CustomLog()
+            log = optionstrader.CustomLog()
             msg = "STARTING UNITTEST".center(100, "-")
             log.debug(msg)
             return method(*args, **kwargs)
@@ -19,7 +16,7 @@ class TestAnalyzer(unittest.TestCase):
 
     def log_end(method):
         def __init__(*args, **kwargs):
-            log = customlogging.CustomLog()
+            log = optionstrader.CustomLog()
             msg = "UNITTEST COMPLETE".center(100, "-")
             log.debug(msg)
             log.debug("-".center(100, "-"))
@@ -28,10 +25,10 @@ class TestAnalyzer(unittest.TestCase):
 
     @log_start
     def setUp(self):
-        self.analyzer = analyzer.Analyzer()
-        self.database = database.Database()
-        self.stream = stream.Stream()
-        self.log = customlogging.CustomLog()
+        self.analyzer = optionstrader.Analyzer()
+        self.database = optionstrader.Database()
+        self.stream = optionstrader.Stream()
+        self.log = optionstrader.CustomLog()
 
     @log_end
     def tearDown(self):
@@ -96,7 +93,7 @@ class TestAnalyzer(unittest.TestCase):
         self.assertTrue(option_chain_dict_array)
 
 
-    @unittest.skip("skipping...")
+    #@unittest.skip("skipping...")
     def test_analyze_option_chain(self):
         # This module take the stock's most recent price into account when
         # performing the analysis.
@@ -108,7 +105,7 @@ class TestAnalyzer(unittest.TestCase):
         # option_chains is a list of all option chains for a given ticker,
         # sorted by timestamp in descending order
 
-        ticker = 'FB'
+        #ticker = 'FB'
         #ticker_array_len = len(ticker_array) = number of cores (num workers)
         ticker_array = ['FB', 'GOOG', 'GOOGL', 'V', 'T', 'NFLX', 'NVDI', 'VZ']
 

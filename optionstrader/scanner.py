@@ -30,6 +30,8 @@ class Scanner:
         #time.time()
         #log_msg = "Starting self.analyzer.analyze_single_option_chain..."
         #self.log.debug(log_msg)
+        # TODO Fix below if you want to analyze the option chain while it is scanning
+        #results_analyze = True
         results_analyze = self.analyzer.analyze_single_option_chain(option_chain)
         return results_save, results_analyze
 

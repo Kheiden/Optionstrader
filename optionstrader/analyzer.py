@@ -309,7 +309,7 @@ class Analyzer:
             # update database
             # TODO
             #self.add_to_db_update_queue(percentage_increase_analysis)
-            #self.database.update_option_chain_with_analysis(percentage_increase_analysis)
+            self.database.update_option_chain_with_analysis(percentage_increase_analysis)
             # percentage_increase_analysis is the variable used to determine if the choice is good or not
             #self.log.debug("percentage_increase_analysis:")
             #self.log.debug(percentage_increase_analysis)

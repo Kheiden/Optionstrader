@@ -66,7 +66,7 @@ class TestScanner(unittest.TestCase):
         #results = self.scanner.process_option_chain(option_chain_array=option_chain_array)
         #self.assertTrue(results)
 
-    @unittest.skip("NOT YET PASSED.")
+    @unittest.skip("PASSED.")
     def test_process_option_chain(self):
         result = self.scanner.start_option_chain_scan(number_of_weeks=4, scan_type='next_week_only',
                 query_type='one_option_only', ticker_array=None)
@@ -74,10 +74,8 @@ class TestScanner(unittest.TestCase):
         self.assertTrue(result)
 
 
-    #@unittest.skip("NOT YET PASSED.")
+    @unittest.skip("NOT YET PASSED.")
     def test_start_option_chain_scan(self):
-        # This is a perpetual scan.  It will never pass because it will never complete
-
         # - inside_out: Scans for option chains for the earliest option expiration date, then goes outwards.
         # Scan start with the AAAA ends with ZZZZ.
 
@@ -92,7 +90,7 @@ class TestScanner(unittest.TestCase):
         -
         '''
 
-        query_type = 'default'
+        query_type = 'options_only'
         #query_type = 'options_only'
         number_of_weeks = 4
         scan_type = 'inside_out'
@@ -106,22 +104,21 @@ class TestScanner(unittest.TestCase):
         # Goal scan rate: .20 seconds per ticker
 
         number_iterations = 0
-        while True:
 
-            self.scanner.start_option_chain_scan(scan_type=scan_type,
-                number_of_weeks=number_of_weeks,
-                query_type=query_type)
-            time_after = time.time()
-            sec = time_after - time_before
 
-            msg = "Completed option_scan with exp_date_type '{exp_date_type}' in time: {sec}sec".format(
-                sec=sec,
-                exp_date_type=exp_date_type)
+        ticker_array = ["FB", "GOOG", "AAPL"]
 
-            self.log.debug(msg)
+        self.scanner.start_option_chain_scan(scan_type=scan_type,
+            number_of_weeks=number_of_weeks,
+            query_type=query_type, ticker_array=ticker_array)
+        time_after = time.time()
+        sec = time_after - time_before
 
-            msg = "Number of iterations: {}".format(number_iterations)
-            self.log.debug(msg)
+        msg = "Completed option_scan with scan_type '{scan_type}' in time: {sec}sec".format(
+            sec=sec,
+            scan_type=scan_type)
+
+        self.log.debug(msg)
         self.log.debug("OPTION CHAIN SCAN COMPLETED".center(100, "-"))
 
         # - outside_in: Scans for option chains for the farthest option expiration date (set limit manually Eg- 6 months out),
