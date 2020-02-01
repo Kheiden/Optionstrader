@@ -1,13 +1,12 @@
 import unittest
 
-from context import Stream
-from context import CustomLog
+from context import optionstrader
 
 class TestStream(unittest.TestCase):
 
     def log_start(method):
         def __init__(*args, **kwargs):
-            log = CustomLog()
+            log = optionstrader.CustomLog()
             msg = "STARTING UNITTEST".center(100, "-")
             log.debug(msg)
             return method(*args, **kwargs)
@@ -15,7 +14,7 @@ class TestStream(unittest.TestCase):
 
     def log_end(method):
         def __init__(*args, **kwargs):
-            log = CustomLog()
+            log = optionstrader.CustomLog()
             msg = "UNITTEST COMPLETE".center(100, "-")
             log.debug(msg)
             return method(*args, **kwargs)
@@ -23,8 +22,8 @@ class TestStream(unittest.TestCase):
 
     @log_start
     def setUp(self):
-        self.stream = Stream()
-        self.log = CustomLog()
+        self.stream = optionstrader.Stream()
+        self.log = optionstrader.CustomLog()
 
     @log_end
     def tearDown(self):

@@ -93,7 +93,7 @@ class TestAnalyzer(unittest.TestCase):
         self.assertTrue(option_chain_dict_array)
 
 
-    #@unittest.skip("skipping...")
+    @unittest.skip("skipping...")
     def test_analyze_option_chain(self):
         # This module take the stock's most recent price into account when
         # performing the analysis.

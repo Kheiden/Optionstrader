@@ -2,11 +2,7 @@ import json
 import time
 import datetime
 
-from context import Webservice
-from context import Database
-from context import Savefile
-from context import Scanner
-from context import Tools
+from context import optionstrader
 
 import unittest
 
@@ -25,10 +21,10 @@ class TestScript(unittest.TestCase):
 
 
     def setUp(self):
-        self.w = Webservice()
-        self.d = Database()
-        self.savefile = Savefile()
-        self.scanner = Scanner()
+        self.w = optionstrader.Webservice()
+        self.d = optionstrader.Database()
+        self.savefile = optionstrader.Savefile()
+        self.scanner = optionstrader.Scanner()
         # Get from Tradier
         self.access_token = ""
         # Get from Tradier

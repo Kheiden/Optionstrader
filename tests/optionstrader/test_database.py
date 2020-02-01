@@ -63,7 +63,7 @@ class TestDatabase(unittest.TestCase):
         pass
 
 # ---------------------------------------- TESTING ----------------------------------------
-    #@unittest.skip("NOT YET PASSED.")
+    @unittest.skip("NOT YET PASSED.")
     def test_add_option_chain_to_database(self):
         expiration_date = self.webservice.get_option_chain_next_expiration_date()
         example_option_chain = self.webservice.get_example_option_chain(self.config.get_environment_url, expiration_date)

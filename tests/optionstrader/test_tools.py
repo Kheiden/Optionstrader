@@ -1,17 +1,14 @@
 import unittest
 
-from context import Tools
-from context import Scanner
-from context import Analyzer
-
+from context import optionstrader
 
 class TestTools(unittest.TestCase):
     # Make sure to test all, before a release
 
     def setUp(self):
-        self.tools = Tools()
-        self.scanner = Scanner()
-        self.analyzer = Analyzer
+        self.tools = optionstrader.Tools()
+        self.scanner = optionstrader.Scanner()
+        self.analyzer = optionstrader.Analyzer()
 
     def tearDown(self):
         return
