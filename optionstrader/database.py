@@ -4,6 +4,9 @@ import mysql.connector
 from optionstrader.customlogging import CustomLog
 from optionstrader.parser import Parser
 
+MYSQL_IP_ADDR = '192.168.1.10'
+# Used to debug via logs
+DEBUG = False
 class Database:
 
     def __init__(self):
@@ -11,9 +14,9 @@ class Database:
         There's some confusion with database vs table.
 
         We will have separate environments for Dev/Stage and Prd,
-        so we will want to ensure that the databases are seperate.
+        so we will want to ensure that the databases are separate.
 
-        TODO: Ensure that the Dev/Stage and Prod environments are fully seggregared
+        TODO: Ensure that the Dev/Stage and Prod environments are fully seggregated
         with their own databases.  This will allows us to migrate the databases when
         the time comes.
 
@@ -30,21 +33,7 @@ class Database:
 
         self.log = CustomLog()
         self.parser = Parser()
-
-        try:
-            # Using loopback for testing purposes.  Might use socket level later.
-            self.connection = mysql.connector.connect(user='root', password='root',
-                                                          host='localhost',
-                                                          port='3306')
-            #database='algotrader_data'
-
-        #mysql.connector.errors.InterfaceError: 2003: Can't connect to MySQL server on 'localwhost:3306'
-
-        except Exception as e:
-            msg = "Error! Please check the MySQL database connection: {error}".format(error=e)
-            self.log.debug(msg)
-            log_msg = msg
-
+        self.connection = self.connect_to_database()
         # CONFIGURATION
         # Possible Values: "Dev", "Stage", "Production"
         # Changebelow code when config file exists
@@ -54,6 +43,20 @@ class Database:
         # The reason behind this is because we do not want to delete stock market date
         # Instead, we would rather query the database and only select the records that
         # are within the threshold
+
+    def connect_to_database(self):
+      # try:
+          # Using loopback for testing purposes.  Might use socket level later.
+        return mysql.connector.connect(user='optionstrader_service_account', password='helloworld',
+                                                        host=MYSQL_IP_ADDR,
+                                                        port='3306')
+          #database='algotrader_data'
+
+      #mysql.connector.errors.InterfaceError: 2003: Can't connect to MySQL server on 'localwhost:3306'
+
+      # except Exception as e:
+      #     msg = "Error! Please check the MySQL database connection: {error}".format(error=e)
+      #     self.log.debug(msg)
 
     def configure_database(self):
         database_name = "algotrader_dev"
@@ -75,11 +78,12 @@ class Database:
         table_name = "optionchainanalysis"
         self.create_table(database_name, table_name, table_columns)
 
-        self.parse_symbols_and_add_to_db()
-        print("Database has been configured")
+        # self.parse_symbols_and_add_to_db()
+        self.log.debug("Database has been configured")
         return True
 
     def create_database(self, database_name):
+      try:
         cursor = self.connection.cursor()
         query = ("CREATE DATABASE {database_name}").format(database_name=database_name)
         cursor.execute(query)
@@ -88,10 +92,14 @@ class Database:
         msg = "Database `{database_name}` created.".format(
             database_name=database_name)
         self.log.debug(msg)
-        print(msg)
         return True
+      except:
+        msg = "Database `{database_name}` can't be created.".format(
+            database_name=database_name)
+        self.log.debug(msg)
 
     def create_table(self, database_name, table_name, table_columns):
+      try:
         cursor = self.connection.cursor()
         query = "CREATE TABLE {database_name}.{table_name} {table_columns}".format(
             database_name=database_name,
@@ -104,8 +112,11 @@ class Database:
             database_name=database_name,
             table_name=table_name)
         self.log.debug(msg)
-        print(msg)
         return True
+      except:
+        msg = "Table `{table_name}` can't be created.".format(
+            table_name=table_name)
+        self.log.debug(msg)
 
     def close_connection(self):
         self.connection.close()
@@ -184,6 +195,7 @@ class Database:
         # As of 2/11/17, there are 3078 total results from this query
         self.connection.commit()
         result = cursor.execute(query)
+        print(result)
         list_of_tickers = list()
         for ticker in cursor:
             #print(ticker[0])
@@ -214,7 +226,6 @@ class Database:
             num_chains_limit=num_chains_limit))
         self.connection.commit()
         cursor.execute(query)
-
 
         self.log.debug("****Type:{0}".format(type(cursor)))
         return cursor
@@ -339,8 +350,10 @@ class Database:
                             table=table,
                             keys=keys_formatted,
                             values=values_formatted)
-                #log_msg = "~~~~-----------------~~~"
-                #print(query)
+                log_msg = "~~~~-----------------~~~"
+                query = query.replace("'None'", 'NULL')
+                if DEBUG is True:
+                  print(query)
                 cursor.execute(query)
                 self.connection.commit()
                 cursor.close()
@@ -458,5 +471,4 @@ class Database:
 
         msg = "Symbols parsed and added to database"
         self.log.debug(msg)
-        print(msg)
         return results

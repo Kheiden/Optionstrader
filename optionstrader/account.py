@@ -24,7 +24,8 @@ class Account:
         except Exception as e:
             msg = "Error! Please check the MySQL database connection: {error}".format(error=e)
             self.log.debug(msg)
-            log_msg = msg
+            print(msg)
+            raise Exception
 
         # CONFIGURATION
         # Possible Values: "Dev", "Stage", "Production"
@@ -62,7 +63,8 @@ class Account:
 
         # We want a random 20 digit number. Any leading zeroes will be appended
         # to the account number on the database side.
-
+        if not account_type in ['checking', 'savings']:
+          return False
         data = {}
 
         account_number = str(random.randint(pow(10,20), pow(10,21)-1))

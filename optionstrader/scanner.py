@@ -6,6 +6,9 @@ from .config import Config
 from .customlogging import CustomLog
 from .analyzer import Analyzer
 
+# Max number of tickers to
+MAX_TICKERS_PER_CHUNK = 1000
+
 class Scanner:
 
     def __init__(self):
@@ -149,7 +152,7 @@ class Scanner:
 
     def start_stock_scan(self):
         list_of_tickers = self.database.get_list_of_tickers()
-        for ticker_chunk in self.chunks(list_of_tickers, 1000):
+        for ticker_chunk in self.chunks(list_of_tickers, MAX_TICKERS_PER_CHUNK):
             chunk_stock_data = self.webservice.get_market_quote_for_ticker(self.config.get_environment_url, ticker_chunk)
             for single_stock_data in chunk_stock_data:
                 self.database.save_option_chain_to_table(single_stock_data, table='stocks')

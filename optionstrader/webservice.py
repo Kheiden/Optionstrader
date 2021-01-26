@@ -172,6 +172,7 @@ class Webservice:
     def get_market_quote_for_ticker(self, environment_url, stock_symbols):
         self.session = Tradier(self.access_token)
         results = self.session.markets.quotes(stock_symbols)
+        [print(i) for i in results]
         return results
 
     def get_company_information_for_ticker(self, environment_url, stock_symbols):

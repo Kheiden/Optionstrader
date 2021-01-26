@@ -42,7 +42,7 @@ db.configure_database()
 4) Obtain an Oauth access token from the Traider Developer web portal and add the `oauth_access_token` to `config_data_Dev.json`
 5) Start the stock scan with the following code:
 ```
-scanner = optionstracer.Scanner()
+scanner = optionstrader.Scanner()
 scanner.start_stock_scan()
 ```
 6) After the stock data is finished, you can start the option chain scan with the following:

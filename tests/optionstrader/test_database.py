@@ -1,7 +1,10 @@
 import timeit
 
 import unittest
+from unittest import mock
 from context import optionstrader
+
+TEST_EXTRACTED_SYMBOLS = [['T', 'AT&T Inc.'], ['V', 'Visa Inc']]
 
 class TestAccountDatabase(unittest.TestCase):
     def log_start(method):
@@ -52,7 +55,8 @@ class TestDatabase(unittest.TestCase):
 
 
     @log_start
-    def setUp(self):
+    @mock.patch.object(optionstrader.Database, 'connect_to_database', autospec=True)
+    def setUp(self, db_conn_mock):
         self.config = optionstrader.Config()
         self.database = optionstrader.Database()
         self.log = optionstrader.CustomLog()
@@ -108,35 +112,24 @@ class TestDatabase(unittest.TestCase):
         self.assertTrue(array)
 
 # ----------------------------------------- PASSED -----------------------------------------
-    @unittest.skip("PASSED.")
-    def test_parse_symbols_and_add_to_db(self):
-        result = self.database.parse_symbols_and_add_to_db()
-        self.assertTrue(result)
+    @mock.patch.object(optionstrader.Parser, 'extract_symbols')
+    def test_parse_symbols_and_add_to_db(self, extract_symbols_mock):
+      extract_symbols_mock.return_value=TEST_EXTRACTED_SYMBOLS
+      result = self.database.parse_symbols_and_add_to_db()
+      self.assertTrue(result)
 
-    @unittest.skip("PASSED.")
     def test_create_database(self):
         database_name = "algotrader_dev"
         created = self.database.create_database(database_name)
         self.assertTrue(created)
 
-    @unittest.skip("PASSED")
     def test_configure_database(self):
         result = self.database.configure_database()
         self.assertTrue(result)
 
-    @unittest.skip("PASSED.")
     def test_get_list_of_tickers(self):
-        # 0.56 for 10 tests
-        #time_results = timeit.timeit(self.database.get_list_of_tickers(), number=1)
-        # 1 test 0.126 sec. Goal 1 test: 0.00126
-        # 10 tests 1.441 sec. Goal 10 tests: X / 100 = 0.01441
-        num_tests = 10
-
-        for i in range(num_tests):
-            list_of_tickers = self.database.get_list_of_tickers()
-            self.assertEqual(len(list_of_tickers), 3078)
-        #self.assertTrue(time_results < 10)
-        self.log.debug("Completed {} tests".format(num_tests))
+      list_of_tickers = self.database.get_list_of_tickers()
+      self.assertTrue(list_of_tickers)
 
     @unittest.skip("PASSED.")
     def test_type_conversion(self):

@@ -235,6 +235,7 @@ class Analyzer:
 
             percentage_increase_analysis['symbol'] = symbol
             #log_msg = "symbol: {}".format(symbol)
+            percentage_increase_analysis['option_type'] = option_chain['option_type']
 
             percentage_increase_analysis['stock_price_increase'] = stock_price_increase
             #log_msg = "stock_price_increase: {}".format(stock_price_increase)
